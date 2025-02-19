@@ -25,3 +25,8 @@
 # TODO
 - Name of project
 - Research into problem space
+
+# Proposed Meeting Schedule
+- Everyday 9PM 
+- 1 hour
+- Online
