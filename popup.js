@@ -70,4 +70,5 @@ document.addEventListener("DOMContentLoaded", function () {
   // Event listeners
   addWebsiteBtn.addEventListener("click", addWebsite);
   loadBlockedSites();
+  
 });
