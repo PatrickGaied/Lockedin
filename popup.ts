@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const timerDisplay = document.getElementById("timerDisplay") as HTMLDivElement;
     const decreaseTimeBtn = document.getElementById("decreaseTime") as HTMLButtonElement;
     const increaseTimeBtn = document.getElementById("increaseTime") as HTMLButtonElement;
+    const pauseTimeBtn = document.getElementById("pauseTime") as HTMLButtonElement;
     const sessionDurationSpan = document.getElementById("sessionDuration") as HTMLSpanElement;
   
     // Timer state
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let baseDuration = 30 * 60; // Default 30 minutes in seconds
     let timeLeft = baseDuration;
     let isTimerRunning = false;
+    let isTimerPaused = false;
   
     // Load blocked websites
     function loadBlockedSites(): void {
@@ -28,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         blockedList.innerHTML = "";
         sites.forEach(site => {
           const li = document.createElement("li");
-          li.innerHTML = `${site} <span class="remove-btn" data-site="${site}">❌</span>`;
+          li.innerHTML = `${site} <span class="remove-btn" data-site="${site}">❌   </span>`;
           blockedList.appendChild(li);
         });
         document.querySelectorAll(".remove-btn").forEach(btn => {
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
           timeLeft = state.timeLeft;
           isTimerRunning = state.isTimerRunning;
           const timeElapsed = Math.floor((Date.now() - state.lastUpdate) / 1000);
-          if (isTimerRunning && timeLeft > 0) {
+          if (isTimerRunning && timeLeft > 0 && !isTimerPaused) {
             timeLeft = Math.max(0, timeLeft - timeElapsed);
             if (timeLeft > 0) {
               startTimer();
@@ -150,8 +152,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function startTimer(): void {
       if (timerInterval) clearInterval(timerInterval);
       timerInterval = window.setInterval(() => {
-        if (timeLeft > 0) {
+        if (timeLeft > 0 && !isTimerPaused) {
           timeLeft--;
+          updateTimerDisplay();
+          saveTimerState();
+        } else if (timeLeft > 0) {
           updateTimerDisplay();
           saveTimerState();
         } else {
@@ -175,12 +180,20 @@ document.addEventListener("DOMContentLoaded", function () {
   
     function adjustDuration(delta: number): void {
       if (isTimerRunning) return;
-      const newDuration = Math.max(30 * 60, Math.min(75 * 60, baseDuration + delta * 60));
+      const newDuration = Math.max(30 * 60, Math.min(300 * 60, baseDuration + delta * 60));
       baseDuration = newDuration;
       timeLeft = baseDuration;
       sessionDurationSpan.textContent = `${baseDuration / 60}`;
       updateTimerDisplay();
       saveTimerState();
+    }
+
+    function pauseStudySession(): void {
+        if (!isTimerPaused) {
+          isTimerPaused = true;
+        } else {
+          isTimerPaused = false;
+        }
     }
   
     // Event listeners
@@ -190,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
     startStudySessionBtn.addEventListener("click", startStudySession);
     decreaseTimeBtn.addEventListener("click", () => adjustDuration(-5));
     increaseTimeBtn.addEventListener("click", () => adjustDuration(5));
+    pauseTimeBtn.addEventListener("click", pauseStudySession);
   
     // Initial setup
     loadTimerState(() => {
