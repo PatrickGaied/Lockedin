@@ -117,6 +117,26 @@
     #startStudySession:hover {
       background-color: #4cae4c;
     }
+
+    #pauseTimer {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #pauseTimer:hover {
+      background-color: #005ea2;
+    }
+
+    #resetTimer {
+      background-color: #fc7107;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #resetTimer:hover {
+      background-color: #ea4315;
+    }
     #timerDisplay {
       font-size: 28px;
       font-weight: bold;
@@ -151,7 +171,10 @@
       <button class="timer-btn" id="increaseTime">+</button>
     </div>
     <button id="startStudySession">Start Study Session</button>
+  
     <div id="timerDisplay">30:00</div>
+    <button id="pauseTimer">Pause Study Session</button>
+    <button id="resetTimer">reset Timer</button>
   </div>
   
   <script src="popup.js"></script>
