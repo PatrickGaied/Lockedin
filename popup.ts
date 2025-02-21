@@ -3,6 +3,27 @@ document.addEventListener("DOMContentLoaded", function () {
   const addWebsiteBtn = document.getElementById("addWebsite") as HTMLButtonElement;
   const blockedList = document.getElementById("blockedList") as HTMLUListElement;
 
+  
+  function normalizeSite(site: string): string {
+    // Remove extra whitespace.
+    site = site.trim();
+    
+    // Use a regex to remove the protocol (http://, https://, or *://).
+    site = site.replace(/^(?:https?:\/\/|\*\:\/\/)/, "");
+    
+    // Remove any path that might come after the domain.
+    const slashIndex = site.indexOf("/");
+    if (slashIndex !== -1) {
+      site = site.substring(0, slashIndex);
+    }
+    
+    // Return the plain domain, e.g., "youtube.com" or "www.youtube.com"
+    return site;
+  }
+  
+
+
+
   // Load blocked websites from storage
   function loadBlockedSites(): void {
       chrome.storage.local.get(["blockedWebsites"], function (result: { blockedWebsites?: string[] }) {
@@ -28,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function addWebsite(): void {
       let site: string = websiteInput.value.trim();
       if (!site) return;
+      site = normalizeSite(site);
 
       chrome.storage.local.get(["blockedWebsites"], function (result: { blockedWebsites?: string[] }) {
           let sites: string[] = result.blockedWebsites || [];
