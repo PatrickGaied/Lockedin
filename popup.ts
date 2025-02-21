@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let site: string = websiteInput.value.trim();
         if (!site) return;
-        site = normalizeSite(site);
+        // site = normalizeSite(site);
 
         chrome.storage.local.get(
             ["blockedWebsites"],
