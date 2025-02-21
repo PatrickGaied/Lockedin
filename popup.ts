@@ -1,9 +1,10 @@
+/// <reference types="chrome" />
+
 document.addEventListener("DOMContentLoaded", function () {
   const websiteInput = document.getElementById("websiteInput") as HTMLInputElement;
   const addWebsiteBtn = document.getElementById("addWebsite") as HTMLButtonElement;
   const blockedList = document.getElementById("blockedList") as HTMLUListElement;
 
-  
   function normalizeSite(site: string): string {
     // Remove extra whitespace.
     site = site.trim();
@@ -20,9 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Return the plain domain, e.g., "youtube.com" or "www.youtube.com"
     return site;
   }
-  
-
-
 
   // Load blocked websites from storage
   function loadBlockedSites(): void {
@@ -45,8 +43,23 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // function to clear all service workers of current domain using chrome.browsingData.remove
+  // Because Manifest V3 update, YouTube displays content using a ServiceWorker to create page w/o network request
+  // https://stackoverflow.com/questions/15532791/getting-around-x-frame-options-deny-in-a-chrome-extension/69177790#69177790
+    function clearServiceWorkers() {
+        chrome.browsingData.remove({}, {
+        serviceWorkers: true
+        }, () => {
+        console.log("Service workers cleared!");
+        });
+    }
+
   // Function to add a website to the blocklist
-  function addWebsite(): void {
+  async function addWebsite(): Promise<void> {
+
+      // Clear service workers
+      clearServiceWorkers();
+
       let site: string = websiteInput.value.trim();
       if (!site) return;
       site = normalizeSite(site);
@@ -65,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to remove a website from the blocklist
-  function removeWebsite(site: string): void {
+  async function removeWebsite(site: string): Promise<void> {
       chrome.storage.local.get(["blockedWebsites"], function (result: { blockedWebsites?: string[] }) {
           let sites: string[] = result.blockedWebsites || [];
           sites = sites.filter(s => s !== site);
@@ -84,12 +97,12 @@ document.addEventListener("DOMContentLoaded", function () {
               id: index + 1,
               priority: 1,
               action: { type: chrome.declarativeNetRequest.RuleActionType.BLOCK },
-              condition: { urlFilter: site, resourceTypes: ["main_frame"] as chrome.declarativeNetRequest.ResourceType[] }
+              condition: { urlFilter: site, resourceTypes: ["main_frame", "sub_frame"] as chrome.declarativeNetRequest.ResourceType[] }
           }))
       });
   }
 
   // Event listeners
-  addWebsiteBtn.addEventListener("click", addWebsite);
+  addWebsiteBtn.addEventListener("click", () => addWebsite());
   loadBlockedSites();
 });

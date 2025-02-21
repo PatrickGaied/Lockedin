@@ -4,6 +4,8 @@
   "version": "1.0",
   "permissions": [
     "declarativeNetRequest", 
+    "declarativeNetRequestWithHostAccess",
+    "browsingData",
     "storage"
   ],
   "host_permissions": [
