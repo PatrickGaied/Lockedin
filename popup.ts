@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const timerDisplay = document.getElementById("timerDisplay") as HTMLDivElement;
     const decreaseTimeBtn = document.getElementById("decreaseTime") as HTMLButtonElement;
     const increaseTimeBtn = document.getElementById("increaseTime") as HTMLButtonElement;
-    const pauseTimeBtn = document.getElementById("pauseTime") as HTMLButtonElement;
+    const pauseTimerBtn = document.getElementById("pauseTimer") as HTMLButtonElement;
+    const resetTimerButton = document.getElementById("resetTimer") as HTMLButtonElement;
     const sessionDurationSpan = document.getElementById("sessionDuration") as HTMLSpanElement;
   
     // Timer state
@@ -188,12 +189,22 @@ document.addEventListener("DOMContentLoaded", function () {
       saveTimerState();
     }
 
-    function pauseStudySession(): void {
+    function pauseStudySession(): void { 
         if (!isTimerPaused) {
           isTimerPaused = true;
         } else {
           isTimerPaused = false;
         }
+    }
+
+    function resetTimerBtn(): void {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      isTimerRunning = false;
+      isTimerPaused = false;
+      timeLeft = baseDuration;
+      updateTimerDisplay();
+      saveTimerState();
     }
   
     // Event listeners
@@ -203,7 +214,9 @@ document.addEventListener("DOMContentLoaded", function () {
     startStudySessionBtn.addEventListener("click", startStudySession);
     decreaseTimeBtn.addEventListener("click", () => adjustDuration(-5));
     increaseTimeBtn.addEventListener("click", () => adjustDuration(5));
-    pauseTimeBtn.addEventListener("click", pauseStudySession);
+    pauseTimerBtn.addEventListener("click", pauseStudySession);
+    resetTimerButton.addEventListener("click", resetTimerBtn);
+
   
     // Initial setup
     loadTimerState(() => {

@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const timerDisplay = document.getElementById("timerDisplay");
     const decreaseTimeBtn = document.getElementById("decreaseTime");
     const increaseTimeBtn = document.getElementById("increaseTime");
-    const pauseTimeBtn = document.getElementById("pauseTime");
+    const pauseTimerBtn = document.getElementById("pauseTimer");
+    const resetTimerButton = document.getElementById("resetTimer");
     const sessionDurationSpan = document.getElementById("sessionDuration");
     // Timer state
     let timerInterval = null;
@@ -188,6 +189,16 @@ document.addEventListener("DOMContentLoaded", function () {
             isTimerPaused = false;
         }
     }
+    function resetTimerBtn() {
+        if (timerInterval)
+            clearInterval(timerInterval);
+        timerInterval = null;
+        isTimerRunning = false;
+        isTimerPaused = false;
+        timeLeft = baseDuration;
+        updateTimerDisplay();
+        saveTimerState();
+    }
     // Event listeners
     addWebsiteBtn.addEventListener("click", addWebsite);
     blockedWebsitesTab.addEventListener("click", (evt) => openTab(evt, "BlockedWebsites"));
@@ -195,7 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
     startStudySessionBtn.addEventListener("click", startStudySession);
     decreaseTimeBtn.addEventListener("click", () => adjustDuration(-5));
     increaseTimeBtn.addEventListener("click", () => adjustDuration(5));
-    pauseTimeBtn.addEventListener("click", pauseStudySession);
+    pauseTimerBtn.addEventListener("click", pauseStudySession);
+    resetTimerButton.addEventListener("click", resetTimerBtn);
     // Initial setup
     loadTimerState(() => {
         loadBlockedSites();
