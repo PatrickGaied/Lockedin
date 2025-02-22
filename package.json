@@ -1,4 +1,10 @@
 {
+  "scripts": { 
+    "clean": "rmdir /s /q dist && mkdir dist",
+    "compile": "npx tsc",
+    "copy-assets": "robocopy . dist /E /XD dist .git node_modules /XF tsconfig.json README.md .gitignore *.ts *.tsx",
+    "build": "npm run clean && npm run compile && npm run copy-assets"
+  },
   "devDependencies": {
     "@types/chrome": "^0.0.304",
     "typescript": "^5.7.3"
