@@ -1,6 +1,6 @@
 {
   "scripts": { 
-    "clean": "rmdir /s /q dist && mkdir dist",
+    "clean": "rmdir /s /q dist && mkdir dist && echo.>dist/.placeholder",
     "compile": "npx tsc",
     "copy-assets": "robocopy . dist /E /XD dist .git node_modules /XF tsconfig.json package-lock.json package.json README.md .gitignore *.ts *.tsx",
     "build": "npm run clean && npm run compile && npm run copy-assets"
