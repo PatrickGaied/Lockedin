@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to remove a website from the blocklist
     async function removeWebsite(site: string): Promise<void> {
+      if (confirm(`Are you sure you want to remove ${site} from the blacklist?`)) {
         chrome.storage.local.get(
             ["blockedWebsites"],
             function (result: { blockedWebsites?: string[] }) {
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
         );
+      }
     }
 
     // Function to update blocking rules
