@@ -256,6 +256,12 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Event listeners
     addWebsiteBtn.addEventListener("click", addWebsite);
+
+    websiteInput.addEventListener("keydown", (evt: KeyboardEvent) => {
+      // Users can add websites by pressing Enter in the input field
+      if (evt.key === "Enter") addWebsite();
+    });
+
     blockedWebsitesTab.addEventListener("click", (evt) => openTab(evt, "BlockedWebsites"));
     studySessionTab.addEventListener("click", (evt) => openTab(evt, "StudySession"));
     startStudySessionBtn.addEventListener("click", startStudySession);
