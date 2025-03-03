@@ -1,5 +1,7 @@
 /// <reference types="chrome" />
 
+import { normalizeSite } from "./utils/utils.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     // Blocking elements
     const websiteInput = document.getElementById("websiteInput") as HTMLInputElement;
@@ -72,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let site: string = websiteInput.value.trim();
         if (!site) return;
-        // site = normalizeSite(site);
+        site = normalizeSite(site);
 
         chrome.storage.local.get(
             ["blockedWebsites"],
