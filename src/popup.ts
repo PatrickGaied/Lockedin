@@ -1,5 +1,7 @@
 /// <reference types="chrome" />
 
+import { normalizeSite } from "./utils/utils.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     // Blocking elements
     const websiteInput = document.getElementById("websiteInput") as HTMLInputElement;
@@ -72,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let site: string = websiteInput.value.trim();
         if (!site) return;
-        // site = normalizeSite(site);
+        site = normalizeSite(site);
 
         chrome.storage.local.get(
             ["blockedWebsites"],
@@ -95,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to remove a website from the blocklist
     async function removeWebsite(site: string): Promise<void> {
+      if (confirm(`Are you sure you want to remove ${site} from the blacklist?`)) {
         chrome.storage.local.get(
             ["blockedWebsites"],
             function (result: { blockedWebsites?: string[] }) {
@@ -109,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
         );
+      }
     }
 
     // Function to update blocking rules
@@ -254,6 +258,12 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Event listeners
     addWebsiteBtn.addEventListener("click", addWebsite);
+
+    websiteInput.addEventListener("keydown", (evt: KeyboardEvent) => {
+      // Users can add websites by pressing Enter in the input field
+      if (evt.key === "Enter") addWebsite();
+    });
+
     blockedWebsitesTab.addEventListener("click", (evt) => openTab(evt, "BlockedWebsites"));
     studySessionTab.addEventListener("click", (evt) => openTab(evt, "StudySession"));
     startStudySessionBtn.addEventListener("click", startStudySession);
