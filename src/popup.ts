@@ -1,6 +1,7 @@
 /// <reference types="chrome" />
 
 import { normalizeSite } from "./utils/utils.js";
+import { sendPostRequest } from "./post.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     // Blocking elements
@@ -105,9 +106,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 sites = sites.filter((s) => s !== site);
                 chrome.storage.local.set(
                     { blockedWebsites: sites },
-                    function () {
+                    async function () {
                         updateBlockingRules(sites);
                         loadBlockedSites();
+                        await sendPostRequest();
                     }
                 );
             }
