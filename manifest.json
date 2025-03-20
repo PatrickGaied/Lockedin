@@ -18,5 +18,8 @@
       "48": "./src/assets/icons/icon48.png",
       "128": "./src/assets/icons/icon128.png"
     }
+  },
+  "background": {
+    "type": "module"
   }
 }
