@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Blocker & Study Session</title>
+  <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+  <div class="tab">
+    <button class="tablinks" id="blockedWebsitesTab">Blocked Websites</button>
+    <button class="tablinks" id="studySessionTab">Study Session</button>
+  </div>
+  
+  <div id="BlockedWebsites" class="tabcontent">
+    <h3>Blocked Websites</h3>
+    <input type="text" id="websiteInput" placeholder="Enter website (e.g., facebook.com)">
+    <button id="addWebsite">Block Website</button>
+    <ul id="blockedList"></ul>
+  </div>
+  
+  <div id="StudySession" class="tabcontent">
+    <h3>Study Session</h3>
+    <div class="timer-controls">
+      <button class="timer-btn" id="decreaseTime">-</button>
+      <span id="sessionDuration">30</span>
+      <button class="timer-btn" id="increaseTime">+</button>
+    </div>
+    <button id="startStudySession">Start Study Session</button>
+  
+    <div id="timerDisplay">30:00</div>
+    <button id="pauseTimer">Pause Study Session</button>
+    <button id="resetTimer">reset Timer</button>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
